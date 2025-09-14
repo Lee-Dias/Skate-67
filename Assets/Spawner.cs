@@ -1,44 +1,69 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
     [SerializeField]
-    private Objects[] objects;
+    private List<GameObject> Floor;
     [SerializeField]
-    private float startingTimePerSpawn;
+    private List<GameObject> FloorWithObstacles;
     [SerializeField]
-    private float endTimePerSpawn;
+    private float timePerSpawn = 1.5f;
     [SerializeField]
-    private Transform[] spawnPositions;
+    private int MinDistancePerObstacle = 3;
     [SerializeField]
-    private float objectTimeAlive;
-    [SerializeField]
-    private float objectsStartVelocity;
-    [SerializeField]
-    private float objectsEndVelocity;
+    private int MaxDistancePerObstacle = 5;
 
-    private float totalTimePassed;
-    private float timePassedSinceLastSpawn;
-    private float timer;
-    private float timePerSpawn;
+    private int lastObstacleSpawn = 0;
+    private float timePassedSinceLastSpawn = 50;
+    private int nextObstacleIn = 1;
+    private GameObject lastFloorSpawned;
 
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
     {
-        timePerSpawn = startingTimePerSpawn;
+        Transform firstChild = transform.GetChild(0);
+        lastFloorSpawned = firstChild.gameObject;
     }
+
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-
-        totalTimePassed += Time.deltaTime;
         timePassedSinceLastSpawn += Time.deltaTime;
+        if (timePassedSinceLastSpawn > timePerSpawn)
+        {
+            GameObject nextFloorOrObstacle;
+            GameObject spawned;
+            if (nextObstacleIn == 0)
+            {
+                int r = Random.Range(0, FloorWithObstacles.Count());
+                nextFloorOrObstacle = FloorWithObstacles[r];
+                spawned = Instantiate(nextFloorOrObstacle, this.transform);
+                DecideWhenIsNextObstacle();
+            }
+            else
+            {
+                int r = Random.Range(0, Floor.Count());
+                nextFloorOrObstacle = Floor[r];
+                spawned = Instantiate(nextFloorOrObstacle, this.transform);
+                nextObstacleIn -= 1;
+            }
 
-        if (timePassedSinceLastSpawn > timePerSpawn) {
-            int randObject = Random.Range(0, (objects.Length));
-            int randPosition = Random.Range(0, (spawnPositions.Length));
-            GameObject objectSpawned = Instantiate(objects[randObject].Model);
-            objectSpawned.transform.position = spawnPositions[randPosition].position;
-            timePassedSinceLastSpawn = 0;
+            Vector3 SpawnPositon = lastFloorSpawned.transform.position;
+            SpawnPositon.z += 0.95f;
+            spawned.transform.position = SpawnPositon;
+            lastFloorSpawned = spawned;
+            timePassedSinceLastSpawn = 0;   
         }
+    }
+
+    private void DecideWhenIsNextObstacle() {
+        nextObstacleIn = Random.Range(MinDistancePerObstacle, MaxDistancePerObstacle);
+    }
+
+    public void LevelChanged() {
+        
     }
 }
