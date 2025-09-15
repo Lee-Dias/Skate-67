@@ -23,6 +23,9 @@ public class skateController : MonoBehaviour
     private GameObject currentRail;
     private bool isGrinding = false;
     private string gr;
+    private Vector3 preGrindPosition;
+    private Quaternion preGrindRotation;
+
 
 
     void Start()
@@ -74,6 +77,10 @@ public class skateController : MonoBehaviour
     }
     private void TryStartGrind(Transform snapPoint, string animName, Collider rail)
     {
+        // Save pre-grind state
+        preGrindPosition = transform.position;
+        preGrindRotation = transform.rotation;
+
         gr = animName;
         animator.SetBool(animName, true);
 
@@ -83,34 +90,39 @@ public class skateController : MonoBehaviour
         rb.linearVelocity = Vector3.zero;
         currentRail = rail.gameObject;
 
-        // Start a coroutine to move toward the rail
         StartCoroutine(MoveToRail(snapPoint, rail));
     }
 
     private IEnumerator MoveToRail(Transform snapPoint, Collider rail)
     {
-        float duration = 0.2f; // time to reach the rail
+        float duration = 0.2f;
         float elapsed = 0f;
 
         Vector3 startPos = transform.position;
-        Bounds railBounds = rail.bounds;
 
-        // Target position so snapPoint aligns with rail top and horizontally centered
-        Vector3 targetPos = startPos;
-        targetPos.y = railBounds.max.y + (transform.position.y - snapPoint.position.y);
-        targetPos.x = railBounds.center.x - (snapPoint.position.x - transform.position.x);
-        targetPos.z = railBounds.center.z - (snapPoint.position.z - transform.position.z);
+        // Closest point on rail to the nose/tail
+        Vector3 railClosestPoint = rail.ClosestPoint(snapPoint.position);
+
+        // Offset between the root (67) and the snapPoint (Nose/Tail) in world space
+        Vector3 snapOffset = transform.position - snapPoint.position;
+
+        // Where the root (67) needs to move so that snapPoint lands exactly on the rail
+        Vector3 targetPos = railClosestPoint + snapOffset;
 
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
             float t = Mathf.Clamp01(elapsed / duration);
+
             transform.position = Vector3.Lerp(startPos, targetPos, t);
+
             yield return null;
         }
 
-        transform.position = targetPos; // ensure exact alignment
+        transform.position = targetPos; // final snap
     }
+
+
     private void OnTriggerExit(Collider other)
     {
         if (isGrinding && other.gameObject == currentRail)
@@ -123,8 +135,42 @@ public class skateController : MonoBehaviour
     {
         isGrinding = false;
         rb.useGravity = true;
-        animator.SetBool(gr, false); // or any normal skating anim
+        animator.SetBool(gr, false);
         currentRail = null;
+
+        // Smoothly return to pre-grind position
+        StartCoroutine(ReturnFromGrind());
+    }
+
+    private IEnumerator ReturnFromGrind()
+    {
+        float duration = 0.2f; 
+        float elapsed = 0f;
+
+        Vector3 startPos = transform.position;
+        Quaternion startRot = transform.rotation;
+
+        // Target only X and Z, keep current Y
+        Vector3 targetPos = new Vector3(preGrindPosition.x, transform.position.y, preGrindPosition.z);
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+
+            // Lerp X/Z back, keep Y constant
+            float newX = Mathf.Lerp(startPos.x, targetPos.x, t);
+            float newZ = Mathf.Lerp(startPos.z, targetPos.z, t);
+            transform.position = new Vector3(newX, transform.position.y, newZ);
+
+            // Smoothly return rotation if you want
+            transform.rotation = Quaternion.Slerp(startRot, preGrindRotation, t);
+
+            yield return null;
+        }
+
+        transform.position = targetPos;
+        transform.rotation = preGrindRotation;
     }
 
     private void OnCollisionEnter(Collision collision)
