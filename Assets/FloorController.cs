@@ -14,5 +14,10 @@ public class FloorController : MonoBehaviour
         Vector3 pos = transform.position;
         pos.z -= velocity * Time.deltaTime;
         transform.position = pos;
+
+        if (this.transform.position.z < -22)
+        {
+            Destroy(gameObject);
+        }
     }
 }

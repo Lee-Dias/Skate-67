@@ -193,6 +193,7 @@ GameObject:
   - component: {fileID: 11101616}
   - component: {fileID: 11101618}
   - component: {fileID: 11101619}
+  - component: {fileID: 11101620}
   m_Layer: 0
   m_Name: 67
   m_TagString: Untagged
@@ -285,6 +286,28 @@ MonoBehaviour:
   groundLayers:
     serializedVersion: 2
     m_Bits: 72
+  nosePoint: {fileID: 350009638}
+  tailPoint: {fileID: 1573136095}
+  railDetector: {fileID: 11101620}
+--- !u!114 &11101620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 11101614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f26705c47b41de489ab0db0855a0ead, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectRadius: 1
+  boxHalfExtents: {x: 1, y: 1, z: 1}
+  detectDistance: 0
+  useBoxDetection: 0
+  railLayer:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!1001 &321847041
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -923,8 +946,7 @@ MonoBehaviour:
   Floor:
   - {fileID: 1222732114550768459, guid: 9b46ffd3d8839f849a32723e898df0c7, type: 3}
   FloorWithObstacles:
-  - {fileID: 1222732114550768459, guid: 5e1867ad2e334bc45af6ee839659d405, type: 3}
-  - {fileID: 1222732114550768459, guid: 54e9045b3a9198545bc403260f54b481, type: 3}
+  - {fileID: 1222732114550768459, guid: 15eecde078347e149be15de90af7c6f6, type: 3}
   timePerSpawn: 0.5
   MinDistancePerObstacle: 3
   MaxDistancePerObstacle: 5
