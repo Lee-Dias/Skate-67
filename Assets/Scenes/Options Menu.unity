@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 60637277}
   - component: {fileID: 60637276}
   m_Layer: 5
-  m_Name: Credits
+  m_Name: Pause
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -252,7 +252,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Programmers \n"
+  m_text: Resume Trial
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c7a50aa148582c14da6f43ed44d7014e, type: 2}
   m_sharedMaterial: {fileID: -2674433989161721955, guid: c7a50aa148582c14da6f43ed44d7014e, type: 2}
@@ -508,7 +508,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Return
+  m_text: 'Exit
 
 '
   m_isRightToLeft: 0
@@ -673,7 +673,7 @@ GameObject:
   - component: {fileID: 1085188925}
   - component: {fileID: 1085188924}
   m_Layer: 5
-  m_Name: Credits
+  m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -718,7 +718,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Credits
+  m_text: Pause
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c7a50aa148582c14da6f43ed44d7014e, type: 2}
   m_sharedMaterial: {fileID: -2674433989161721955, guid: c7a50aa148582c14da6f43ed44d7014e, type: 2}
@@ -1147,7 +1147,7 @@ GameObject:
   - component: {fileID: 1696252038}
   - component: {fileID: 1696252037}
   m_Layer: 5
-  m_Name: SFX
+  m_Name: Resume
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1268,7 +1268,7 @@ GameObject:
   - component: {fileID: 1916792661}
   - component: {fileID: 1916792660}
   m_Layer: 5
-  m_Name: Music
+  m_Name: Options
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1433,9 +1433,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Artist
-
-'
+  m_text: Options
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c7a50aa148582c14da6f43ed44d7014e, type: 2}
   m_sharedMaterial: {fileID: -2674433989161721955, guid: c7a50aa148582c14da6f43ed44d7014e, type: 2}

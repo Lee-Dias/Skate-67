@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 60637277}
   - component: {fileID: 60637276}
   m_Layer: 5
-  m_Name: Pause
+  m_Name: Credits
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -252,7 +252,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Resume Trial
+  m_text: "Programmers \n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c7a50aa148582c14da6f43ed44d7014e, type: 2}
   m_sharedMaterial: {fileID: -2674433989161721955, guid: c7a50aa148582c14da6f43ed44d7014e, type: 2}
@@ -485,7 +485,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -22}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &614000807
@@ -508,7 +508,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Exit
+  m_text: 'Return
 
 '
   m_isRightToLeft: 0
@@ -673,7 +673,7 @@ GameObject:
   - component: {fileID: 1085188925}
   - component: {fileID: 1085188924}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Credits
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -718,7 +718,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Pause
+  m_text: Credits
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c7a50aa148582c14da6f43ed44d7014e, type: 2}
   m_sharedMaterial: {fileID: -2674433989161721955, guid: c7a50aa148582c14da6f43ed44d7014e, type: 2}
@@ -1147,7 +1147,7 @@ GameObject:
   - component: {fileID: 1696252038}
   - component: {fileID: 1696252037}
   m_Layer: 5
-  m_Name: Resume
+  m_Name: SFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1268,7 +1268,7 @@ GameObject:
   - component: {fileID: 1916792661}
   - component: {fileID: 1916792660}
   m_Layer: 5
-  m_Name: Options
+  m_Name: Music
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1433,7 +1433,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Options
+  m_text: 'Artist
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c7a50aa148582c14da6f43ed44d7014e, type: 2}
   m_sharedMaterial: {fileID: -2674433989161721955, guid: c7a50aa148582c14da6f43ed44d7014e, type: 2}
