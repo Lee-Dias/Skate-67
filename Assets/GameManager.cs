@@ -15,6 +15,11 @@ public class GameManager : MonoBehaviour
     [SerializeField]private int great = 500;
     [SerializeField]private int Perfect = 1000;
 
+    [SerializeField]private Spawner spawner;
+    [SerializeField]private float multiplier = 1.5f;
+
+    private float gameTimePassed;
+
     public void AddPointsToScore(float mult)
     {
         if (one == true && two == false && three == false)
@@ -50,6 +55,15 @@ public class GameManager : MonoBehaviour
         three = i;
     }
 
+    private void Update()
+    {
+        gameTimePassed += Time.deltaTime;
+
+        if (gameTimePassed >= 60)
+        {
+            spawner.levelUp(multiplier);
+        }
+    }
 
 
     // Update is called once per frame

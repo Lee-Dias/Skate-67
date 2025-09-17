@@ -8,15 +8,16 @@ public class Spawner : MonoBehaviour
     [SerializeField] private List<GameObject> FloorWithObstacles;
 
     [Header("Spawn Settings")]
-    [SerializeField] private float baseTimePerSpawn = 1.5f;
-    [SerializeField] private float minTimePerSpawn = 0.5f;
-    [SerializeField] private float accelerationRate = 1f; // how fast we ramp up
+    [SerializeField] private float maxTimePerSpawn = 1.5f; // slowest spawn interval
+    [SerializeField] private float minTimePerSpawn = 0.5f;  // fastest spawn interval
+    [SerializeField] private float accelerationRate = 1f;   // how fast we ramp up
     [SerializeField] private int MinDistancePerObstacle = 3;
     [SerializeField] private int MaxDistancePerObstacle = 5;
 
     [Header("Movement")]
-    public float Velocity { get; private set; } = 0f; // global velocity floors read
-    [SerializeField] private float maxVelocity = 3f;
+    [SerializeField] private float minVelocity = 0f; // minimum movement speed
+    [SerializeField] private float maxVelocity = 3f;   // maximum movement speed
+    public float Velocity { get; private set; } = 0f;  // current global velocity
 
     private int lastObstacleSpawn = 0;
     private float timePassedSinceLastSpawn = 50;
@@ -29,37 +30,40 @@ public class Spawner : MonoBehaviour
     {
         Transform firstChild = transform.GetChild(0);
         lastFloorSpawned = firstChild.gameObject;
-        currentTimePerSpawn = baseTimePerSpawn;
+        currentTimePerSpawn = maxTimePerSpawn;
     }
 
     private void Update()
     {
-        // Only run while W or S is held
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
+        bool holding = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S);
+
+        if (holding)
         {
             // Accelerate towards max speed
             Velocity = Mathf.MoveTowards(Velocity, maxVelocity, accelerationRate * Time.deltaTime);
+        }
+        else
+        {
+            // Decelerate towards min velocity (not all the way to zero)
+            Velocity = Mathf.MoveTowards(Velocity, minVelocity, accelerationRate * Time.deltaTime);
+        }
 
-            // Update spawn rate proportionally to velocity
-            float velocityRatio = Velocity / maxVelocity;
-            currentTimePerSpawn = Mathf.Lerp(baseTimePerSpawn, minTimePerSpawn, velocityRatio);
+        // Map velocity → spawn interval
+        float velocityRatio = Mathf.InverseLerp(minVelocity, maxVelocity, Velocity);
+        currentTimePerSpawn = Mathf.Lerp(maxTimePerSpawn, minTimePerSpawn, velocityRatio);
 
-            // Handle spawning
+        // Spawn floors whenever we’re moving (Velocity > 0), not just when holding
+        if (Velocity > 0f)
+        {
             timePassedSinceLastSpawn += Time.deltaTime;
             if (timePassedSinceLastSpawn > currentTimePerSpawn)
             {
                 SpawnFloor();
                 timePassedSinceLastSpawn = 0;
             }
-        }else
-        {
-            // Slow down when not pressing W or S
-            Velocity = Mathf.MoveTowards(Velocity, 0f, accelerationRate * Time.deltaTime);
-
-            float velocityRatio = Velocity / maxVelocity;
-            currentTimePerSpawn = Mathf.Lerp(baseTimePerSpawn, minTimePerSpawn, velocityRatio);
         }
     }
+
 
     private void SpawnFloor()
     {
@@ -90,5 +94,17 @@ public class Spawner : MonoBehaviour
     private void DecideWhenIsNextObstacle()
     {
         nextObstacleIn = Random.Range(MinDistancePerObstacle, MaxDistancePerObstacle);
+    }
+    public void levelUp(float multiplier)
+    {
+        if (minVelocity == 0)
+        {
+            minVelocity = maxVelocity / 4;
+        }
+
+        minVelocity *= multiplier;
+        maxVelocity *= multiplier;
+        maxTimePerSpawn /= multiplier;
+        minTimePerSpawn /= multiplier;
     }
 }

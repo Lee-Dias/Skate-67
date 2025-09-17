@@ -43,14 +43,21 @@ public class skateController : MonoBehaviour
     void Start()
     {
         if (rb == null) rb = GetComponent<Rigidbody>();
+        
     }
     void Update()
     {
         // Ollie
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if (Input.GetKeyUp(KeyCode.Space) && isGrounded)
         {
             string animN = "Ollie";
             Jump(animN,ollieMultiplicator);
+        }
+        // KickFlip
+        if (Input.GetKeyUp(KeyCode.I) && isGrounded)
+        {
+            string animN = "KickFlip";
+            Jump(animN,kickFlipMultiplicator);
         }
         // Try Nose Slide
         if (Input.GetKeyDown(KeyCode.P) && !isGrounded && !isGrinding)
@@ -95,14 +102,17 @@ public class skateController : MonoBehaviour
         return rail.transform.position.x > 0f; // true = right, false = left
     }
 
-    private void Jump(String name, float multiplicator)
+    private void Jump(string name, float multiplicator)
     {
-        // Physics-based jump
-        rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpForce, rb.linearVelocity.z);
         animator.SetTrigger(name);
+        // Reset only if grounded, otherwise add
+        Vector3 vel = rb.linearVelocity;
+        vel.y = 0f; // clear any downward momentum from gravity
+        rb.linearVelocity = vel + Vector3.up * jumpForce;
         isGrounded = false;
         gameManager.AddPointsToScore(multiplicator);
     }
+
 
     private void TryStartGrind(Transform snapPoint, string animName, Collider rail)
     {
