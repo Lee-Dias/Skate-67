@@ -43,6 +43,10 @@ public class GameManager : MonoBehaviour
             score += (int)(Perfect * mult);
         }
     }
+    public void AddGrindPointsToScore(int GrindPoints)
+    {
+        score += GrindPoints;
+    }
     
     public void SetOneState(bool i)
     {

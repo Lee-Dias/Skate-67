@@ -11,6 +11,7 @@ public class Spawner : MonoBehaviour
     [SerializeField] private float maxTimePerSpawn = 1.5f; // slowest spawn interval
     [SerializeField] private float minTimePerSpawn = 0.5f;  // fastest spawn interval
     [SerializeField] private float accelerationRate = 1f;   // how fast we ramp up
+    [SerializeField] private float deAccelerationRate = 0.2f;   // how fast we ramp up
     [SerializeField] private int MinDistancePerObstacle = 3;
     [SerializeField] private int MaxDistancePerObstacle = 5;
 
@@ -25,6 +26,7 @@ public class Spawner : MonoBehaviour
     private GameObject lastFloorSpawned;
 
     private float currentTimePerSpawn;
+    private bool holding;
 
     private void Awake()
     {
@@ -32,10 +34,14 @@ public class Spawner : MonoBehaviour
         lastFloorSpawned = firstChild.gameObject;
         currentTimePerSpawn = maxTimePerSpawn;
     }
+    public void SetHoldingState(bool hold)
+    {
+        holding = hold;
+    }
 
     private void Update()
     {
-        bool holding = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S);
+        holding = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S);
 
         if (holding)
         {
@@ -45,7 +51,7 @@ public class Spawner : MonoBehaviour
         else
         {
             // Decelerate towards min velocity (not all the way to zero)
-            Velocity = Mathf.MoveTowards(Velocity, minVelocity, accelerationRate * Time.deltaTime);
+            Velocity = Mathf.MoveTowards(Velocity, minVelocity, deAccelerationRate * Time.deltaTime);
         }
 
         // Map velocity → spawn interval

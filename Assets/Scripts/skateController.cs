@@ -38,6 +38,10 @@ public class skateController : MonoBehaviour
     private Vector3 preGrindPosition;
     private Quaternion preGrindRotation;
 
+    private int grindPoints;
+
+
+
 
 
     void Start()
@@ -50,15 +54,15 @@ public class skateController : MonoBehaviour
         // Ollie
         if (Input.GetKeyUp(KeyCode.Space) && isGrounded)
         {
-            string animN = "Ollie";
-            Jump(animN,ollieMultiplicator);
+            Ollie();
         }
         // KickFlip
         if (Input.GetKeyUp(KeyCode.I) && isGrounded)
         {
-            string animN = "KickFlip";
-            Jump(animN,kickFlipMultiplicator);
+            KickFlip();
         }
+
+
         // Try Nose Slide
         if (Input.GetKeyDown(KeyCode.P) && !isGrounded && !isGrinding)
         {
@@ -87,6 +91,16 @@ public class skateController : MonoBehaviour
 
             }
         }
+
+        if (isGrinding)
+        {
+            grindPoints += 10;
+        }
+        else
+        {
+            gameManager.AddGrindPointsToScore(grindPoints);
+            grindPoints = 0;
+        }
         
     }
     void FixedUpdate()
@@ -101,7 +115,14 @@ public class skateController : MonoBehaviour
     {
         return rail.transform.position.x > 0f; // true = right, false = left
     }
-
+    public void Ollie() {
+        string animN = "Ollie";
+        Jump(animN,ollieMultiplicator);
+    }
+    public void KickFlip() {
+        string animN = "KickFlip";
+        Jump(animN,ollieMultiplicator);
+    }
     private void Jump(string name, float multiplicator)
     {
         animator.SetTrigger(name);

@@ -330,6 +330,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4097549050c2ea54dbe3302884b7b6c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skateController: {fileID: 11101619}
+  spawner: {fileID: 834021747}
 --- !u!114 &11101622
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1549,9 +1551,10 @@ MonoBehaviour:
   maxTimePerSpawn: 1.5
   minTimePerSpawn: 0.5
   accelerationRate: 1
+  deAccelerationRate: 0.2
   MinDistancePerObstacle: 3
   MaxDistancePerObstacle: 5
-  minVelocity: 0.5
+  minVelocity: 0
   maxVelocity: 1.5
 --- !u!1001 &847402556
 PrefabInstance:
@@ -2204,8 +2207,8 @@ MonoBehaviour:
   good: 250
   great: 500
   Perfect: 1000
-  spawner: {fileID: 0}
-  multiplier: 1.5
+  spawner: {fileID: 834021747}
+  multiplier: 1.1
 --- !u!4 &1681077314
 Transform:
   m_ObjectHideFlags: 0
@@ -2911,7 +2914,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2b25a546fcba879408267140cb965075, type: 2}
+  - {fileID: 2100000, guid: f987d68423bafc340949c28b067d9d64, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
