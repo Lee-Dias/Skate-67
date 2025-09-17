@@ -2,20 +2,22 @@ using UnityEngine;
 
 public class FloorController : MonoBehaviour
 {
-    private float velocity = 1.5f;
+    private Spawner spawner;
 
-    public void ChangVelocity(float level)
+    private void Start()
     {
-        velocity += level;   
+        spawner = FindFirstObjectByType<Spawner>();
     }
 
     void Update()
     {
+        if (spawner == null) return;
+
         Vector3 pos = transform.position;
-        pos.z -= velocity * Time.deltaTime;
+        pos.z -= spawner.Velocity * Time.deltaTime;
         transform.position = pos;
 
-        if (this.transform.position.z < -22)
+        if (transform.position.z < -22)
         {
             Destroy(gameObject);
         }

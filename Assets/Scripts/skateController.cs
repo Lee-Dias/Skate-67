@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -16,10 +17,21 @@ public class skateController : MonoBehaviour
     [SerializeField] private LayerMask groundLayers;        // Floor + obstacles layers
     [SerializeField] private Transform nosePoint;
     [SerializeField] private Transform tailPoint;
+    [SerializeField] private BoxCollider noseCollider;
+    [SerializeField] private BoxCollider tailCollider;
     [SerializeField] private RailDetector railDetector;
 
+    [Header("Points per trick")]
+    [SerializeField] private float ollieMultiplicator;
+    [SerializeField] private float kickFlipMultiplicator;
+    [SerializeField] private float heelFlipMultiplicator;
+    [SerializeField] private float treFlipMultiplicator;
+    [SerializeField] private float treHeelFlipMultiplicator;
+
+    [SerializeField] private GameManager gameManager;
+
     private bool isGrounded = true;
-    private bool canGrind = false;
+
     private GameObject currentRail;
     private bool isGrinding = false;
     private string gr;
@@ -32,49 +44,66 @@ public class skateController : MonoBehaviour
     {
         if (rb == null) rb = GetComponent<Rigidbody>();
     }
-
     void Update()
     {
-        // Jump input (only if grounded)
+        // Ollie
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
-            PerformOllie();
+            string animN = "Ollie";
+            Jump(animN,ollieMultiplicator);
         }
-        // Try grind
+        // Try Nose Slide
         if (Input.GetKeyDown(KeyCode.P) && !isGrounded && !isGrinding)
         {
-            Collider[] rails = railDetector.DetectRails();  
+            Collider[] rails = railDetector.DetectRails();
             if (rails.Length > 0)
             {
-                TryStartGrind(nosePoint, "NoseGrind", rails[0]);
+                bool railOnRight = IsRailOnRight(nosePoint, rails[0]);
+                if (railOnRight)
+                    TryStartGrind(nosePoint, "NoseGrind", rails[0]);
+                else
+                    TryStartGrind(tailPoint, "TailGrind", rails[0]);
+
             }
         }
+        // Try Tail Slide
         else if (Input.GetKeyDown(KeyCode.O) && !isGrounded && !isGrinding)
         {
-            Collider[] rails = railDetector.DetectRails();  
+            Collider[] rails = railDetector.DetectRails();
             if (rails.Length > 0)
             {
-                TryStartGrind(tailPoint, "TailGrind", rails[0]);
+                bool railOnRight = IsRailOnRight(nosePoint, rails[0]);
+                if (railOnRight)
+                    TryStartGrind(tailPoint, "TailGrind", rails[0]);
+                else
+                    TryStartGrind(nosePoint, "NoseGrind", rails[0]);
+
             }
         }
+        
     }
-
     void FixedUpdate()
     {
-        // Apply stronger gravity for snappier fall
         if (!isGrounded)
         {
             rb.AddForce(Physics.gravity * (gravityMultiplier - 1) * rb.mass);
         }
     }
 
-    private void PerformOllie()
+    private bool IsRailOnRight(Transform snapPoint, Collider rail)
+    {
+        return rail.transform.position.x > 0f; // true = right, false = left
+    }
+
+    private void Jump(String name, float multiplicator)
     {
         // Physics-based jump
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpForce, rb.linearVelocity.z);
-        animator.SetTrigger("Ollie");
+        animator.SetTrigger(name);
         isGrounded = false;
+        gameManager.AddPointsToScore(multiplicator);
     }
+
     private void TryStartGrind(Transform snapPoint, string animName, Collider rail)
     {
         // Save pre-grind state
