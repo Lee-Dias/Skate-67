@@ -17,7 +17,7 @@ public class FloorController : MonoBehaviour
         pos.z -= spawner.Velocity * Time.deltaTime;
         transform.position = pos;
 
-        if (transform.position.z < -22)
+        if (transform.position.z < -25)
         {
             Destroy(gameObject);
         }

@@ -80,20 +80,24 @@ public class Spawner : MonoBehaviour
         {
             int r = Random.Range(0, FloorWithObstacles.Count);
             nextFloorOrObstacle = FloorWithObstacles[r];
-            spawned = Instantiate(nextFloorOrObstacle, this.transform);
             DecideWhenIsNextObstacle();
         }
         else
         {
             int r = Random.Range(0, Floor.Count);
             nextFloorOrObstacle = Floor[r];
-            spawned = Instantiate(nextFloorOrObstacle, this.transform);
             nextObstacleIn -= 1;
         }
 
-        Vector3 spawnPosition = lastFloorSpawned.transform.position;
-        spawnPosition.z += 0.95f;
-        spawned.transform.position = spawnPosition;
+        // Determine spawn position based on last floor
+        Vector3 spawnPosition = lastFloorSpawned != null 
+            ? lastFloorSpawned.transform.position + new Vector3(0, 0, 3.6f) 
+            : Vector3.zero; // First floor at origin if lastFloorSpawned is null
+
+        // Instantiate at world position (no parent)
+        spawned = Instantiate(nextFloorOrObstacle, spawnPosition, Quaternion.identity);
+
+        // Update last floor
         lastFloorSpawned = spawned;
     }
 
@@ -103,7 +107,7 @@ public class Spawner : MonoBehaviour
     }
     public void levelUp(float multiplier)
     {
-        if (minVelocity == 0)
+        if (minVelocity == 0 && maxVelocity > 1)
         {
             minVelocity = maxVelocity / 4;
         }

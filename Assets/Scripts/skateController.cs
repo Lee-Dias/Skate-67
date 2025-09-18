@@ -29,7 +29,7 @@ public class skateController : MonoBehaviour
     [SerializeField] private float treHeelFlipMultiplicator;
 
     [SerializeField] private GameManager gameManager;
-
+    [SerializeField] private float grindDetachDistance = 3f; // tweak to taste
     private bool isGrounded = true;
 
     private GameObject currentRail;
@@ -43,7 +43,6 @@ public class skateController : MonoBehaviour
 
 
 
-
     void Start()
     {
         if (rb == null) rb = GetComponent<Rigidbody>();
@@ -51,45 +50,34 @@ public class skateController : MonoBehaviour
     }
     void Update()
     {
-        // Ollie
-        if (Input.GetKeyUp(KeyCode.Space) && isGrounded)
+        if (isGrinding && currentRail != null)
         {
-            Ollie();
+            float distance = Vector3.Distance(transform.position, currentRail.transform.position);
+            if (distance > grindDetachDistance)
+            {
+                EndGrind();
+            }
         }
-        // KickFlip
-        if (Input.GetKeyUp(KeyCode.I) && isGrounded)
+        if (isGrounded)
         {
-            KickFlip();
+            if (Input.GetKeyUp(KeyCode.Space))
+                Ollie();
+
+            if (Input.GetKeyUp(KeyCode.I))
+                KickFlip();
+
         }
 
 
         // Try Nose Slide
         if (Input.GetKeyDown(KeyCode.P) && !isGrounded && !isGrinding)
         {
-            Collider[] rails = railDetector.DetectRails();
-            if (rails.Length > 0)
-            {
-                bool railOnRight = IsRailOnRight(nosePoint, rails[0]);
-                if (railOnRight)
-                    TryStartGrind(nosePoint, "NoseGrind", rails[0]);
-                else
-                    TryStartGrind(tailPoint, "TailGrind", rails[0]);
-
-            }
+            NoseSlide();
         }
         // Try Tail Slide
         else if (Input.GetKeyDown(KeyCode.O) && !isGrounded && !isGrinding)
         {
-            Collider[] rails = railDetector.DetectRails();
-            if (rails.Length > 0)
-            {
-                bool railOnRight = IsRailOnRight(nosePoint, rails[0]);
-                if (railOnRight)
-                    TryStartGrind(tailPoint, "TailGrind", rails[0]);
-                else
-                    TryStartGrind(nosePoint, "NoseGrind", rails[0]);
-
-            }
+            TailSlide();
         }
 
         if (isGrinding)
@@ -103,8 +91,28 @@ public class skateController : MonoBehaviour
         }
         
     }
+
+    private struct TrickRequest
+    {
+        public string animName;
+        public float scoreMultiplier;
+    }
+
+    private TrickRequest? queuedTrick = null;
+
+    private void QueueTrick(string animName, float mult)
+    {
+        queuedTrick = new TrickRequest { animName = animName, scoreMultiplier = mult };
+    }
+
     void FixedUpdate()
     {
+        if (queuedTrick.HasValue)
+        {
+            PerformTrick(queuedTrick.Value);
+            queuedTrick = null;
+        }
+
         if (!isGrounded)
         {
             rb.AddForce(Physics.gravity * (gravityMultiplier - 1) * rb.mass);
@@ -115,23 +123,56 @@ public class skateController : MonoBehaviour
     {
         return rail.transform.position.x > 0f; // true = right, false = left
     }
-    public void Ollie() {
-        string animN = "Ollie";
-        Jump(animN,ollieMultiplicator);
-    }
-    public void KickFlip() {
-        string animN = "KickFlip";
-        Jump(animN,ollieMultiplicator);
-    }
-    private void Jump(string name, float multiplicator)
+
+    public void Ollie()
     {
-        animator.SetTrigger(name);
-        // Reset only if grounded, otherwise add
+        QueueTrick("Ollie", ollieMultiplicator);
+    }
+
+    public void KickFlip()
+    {
+        QueueTrick("KickFlip", kickFlipMultiplicator);
+    }
+    public void NoseSlide()
+    {
+        Collider[] rails = railDetector.DetectRails();
+        if (rails.Length > 0)
+        {
+            bool railOnRight = IsRailOnRight(nosePoint, rails[0]);
+            if (railOnRight)
+                TryStartGrind(nosePoint, "NoseGrind", rails[0]);
+            else
+                TryStartGrind(tailPoint, "TailGrind", rails[0]);
+
+        }
+    }
+    public void TailSlide()
+    {
+        Collider[] rails = railDetector.DetectRails();
+        if (rails.Length > 0)
+        {
+            bool railOnRight = IsRailOnRight(nosePoint, rails[0]);
+            if (railOnRight)
+                TryStartGrind(tailPoint, "TailGrind", rails[0]);
+            else
+                TryStartGrind(nosePoint, "NoseGrind", rails[0]);
+
+        }
+    }
+
+    private void PerformTrick(TrickRequest trick)
+    {
+        if (rb.linearVelocity.y < 0f)
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+
+        animator.SetTrigger(trick.animName);
+
         Vector3 vel = rb.linearVelocity;
-        vel.y = 0f; // clear any downward momentum from gravity
+        vel.y = 0f;
         rb.linearVelocity = vel + Vector3.up * jumpForce;
+
         isGrounded = false;
-        gameManager.AddPointsToScore(multiplicator);
+        gameManager.AddPointsToScore(trick.scoreMultiplier);
     }
 
 
@@ -144,7 +185,7 @@ public class skateController : MonoBehaviour
         gr = animName;
         animator.SetBool(animName, true);
 
-        isGrinding = true;
+        
         isGrounded = true;
         rb.useGravity = false;
         rb.linearVelocity = Vector3.zero;
@@ -178,10 +219,9 @@ public class skateController : MonoBehaviour
 
             yield return null;
         }
-
+        isGrinding = true;
         transform.position = targetPos; // final snap
     }
-
 
     private void OnTriggerExit(Collider other)
     {
@@ -236,8 +276,18 @@ public class skateController : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         if (((1 << collision.gameObject.layer) & groundLayers) != 0)
-        {
             isGrounded = true;
-        }
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (((1 << collision.gameObject.layer) & groundLayers) != 0)
+            isGrounded = true;
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (((1 << collision.gameObject.layer) & groundLayers) != 0)
+            isGrounded = false;
     }
 }
