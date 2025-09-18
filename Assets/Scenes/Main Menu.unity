@@ -899,10 +899,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menu: {fileID: 1464209442}
-  startButton: {fileID: 0}
-  optionsButton: {fileID: 0}
-  creditsButton: {fileID: 0}
-  leaveGameButton: {fileID: 0}
+  startButton: {fileID: 1696252037}
+  optionsButton: {fileID: 1916792660}
+  creditsButton: {fileID: 1959576003}
+  leaveGameButton: {fileID: 1685896608}
   options: {fileID: 90419829}
   soundSlider: {fileID: 124310233}
   brightnessSlider: {fileID: 664191987}

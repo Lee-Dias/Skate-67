@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;   // Needed for Button
 using UnityEngine.SceneManagement;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 public class NewMonoBehaviourScript : MonoBehaviour
 {
@@ -22,17 +24,21 @@ public class NewMonoBehaviourScript : MonoBehaviour
     [Header("Credits")]
     [SerializeField] private GameObject credits;
     [SerializeField] private Button creditsExit;
+
     private void Awake()
     {
         // Menu
         startButton.onClick.AddListener(LoadNextScene);
         creditsButton.onClick.AddListener(TurnCreditsOn);
         optionsButton.onClick.AddListener(TurnOptionsOn);
-
+        leaveGameButton.onClick.AddListener(QuitGame);
 
         //Options
+        soundSlider.onValueChanged.AddListener(SetVolume);
+        exitOptions.onClick.AddListener(TurnOptionsOff);
 
         //Credits
+        creditsExit.onClick.AddListener(TurnCreditsOff);
     }
 
     private void LoadNextScene()
@@ -68,6 +74,17 @@ public class NewMonoBehaviourScript : MonoBehaviour
     private void TurnMenuOff()
     {
         menu.SetActive(false);
+    }
+
+    private void SetVolume(float value)
+    {
+        // Range should be 0.0f – 1.0f
+        AudioListener.volume = value;
+    }
+
+    private void QuitGame()
+    {
+         Application.Quit();
     }
 
 }
