@@ -95,7 +95,7 @@ public class Spawner : MonoBehaviour
             : Vector3.zero; // First floor at origin if lastFloorSpawned is null
 
         // Instantiate at world position (no parent)
-        spawned = Instantiate(nextFloorOrObstacle, spawnPosition, Quaternion.identity);
+        spawned = Instantiate(nextFloorOrObstacle, spawnPosition, Quaternion.identity, this.gameObject.transform);
 
         // Update last floor
         lastFloorSpawned = spawned;

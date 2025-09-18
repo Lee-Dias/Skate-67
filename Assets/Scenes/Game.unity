@@ -1368,7 +1368,7 @@ MonoBehaviour:
   deAccelerationRate: 0.2
   MinDistancePerObstacle: 1
   MaxDistancePerObstacle: 1
-  minVelocity: 0
+  minVelocity: 0.1
   maxVelocity: 1.5
 --- !u!1001 &894255837
 PrefabInstance:
