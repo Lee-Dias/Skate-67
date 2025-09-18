@@ -28,10 +28,10 @@ public class Spawner : MonoBehaviour
     private float currentTimePerSpawn;
     private bool holding;
 
+    private bool FirstSpawn= true;
+
     private void Awake()
     {
-        Transform firstChild = transform.GetChild(0);
-        lastFloorSpawned = firstChild.gameObject;
         currentTimePerSpawn = maxTimePerSpawn;
     }
     public void SetHoldingState(bool hold)
@@ -41,6 +41,7 @@ public class Spawner : MonoBehaviour
 
     private void Update()
     {
+        holding = Input.GetKey(KeyCode.W);
 
         if (holding)
         {
@@ -72,6 +73,13 @@ public class Spawner : MonoBehaviour
 
     private void SpawnFloor()
     {
+        if (FirstSpawn)
+        {
+            Transform firstChild = transform.GetChild(0);
+            lastFloorSpawned = firstChild.gameObject;
+            FirstSpawn = false;        
+        }
+
         GameObject nextFloorOrObstacle;
         GameObject spawned;
 

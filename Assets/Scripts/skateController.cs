@@ -46,7 +46,6 @@ public class skateController : MonoBehaviour
 
 
 
-
     void Start()
     {
         if (rb == null) rb = GetComponent<Rigidbody>();
@@ -62,7 +61,7 @@ public class skateController : MonoBehaviour
                 EndGrind();
             }
         }
-        if (isGrounded)
+        if (isGrounded && !isGrinding)
         {
             if (Input.GetKeyUp(KeyCode.Space))
                 Ollie();
@@ -194,6 +193,7 @@ public class skateController : MonoBehaviour
 
     private void PerformTrick(TrickRequest trick)
     {
+        if (!isGrounded || isGrinding){return;}
         if (rb.linearVelocity.y < 0f)
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
 
@@ -228,6 +228,7 @@ public class skateController : MonoBehaviour
 
     private IEnumerator MoveToRail(Transform snapPoint, Collider rail)
     {
+
         float duration = 0.2f;
         float elapsed = 0f;
 
