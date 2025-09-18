@@ -23,10 +23,14 @@ public class skateController : MonoBehaviour
 
     [Header("Points per trick")]
     [SerializeField] private float ollieMultiplicator;
+    [SerializeField] private float bigSpinMultiplicator;
+    [SerializeField] private float fsBigSpinMultiplicator;
     [SerializeField] private float kickFlipMultiplicator;
     [SerializeField] private float heelFlipMultiplicator;
     [SerializeField] private float treFlipMultiplicator;
     [SerializeField] private float treHeelFlipMultiplicator;
+    [SerializeField] private float fsTreFlipMultiplicator;
+    [SerializeField] private float fsTreHeelFlipMultiplicator;
 
     [SerializeField] private GameManager gameManager;
     [SerializeField] private float grindDetachDistance = 3f; // tweak to taste
@@ -128,10 +132,38 @@ public class skateController : MonoBehaviour
     {
         QueueTrick("Ollie", ollieMultiplicator);
     }
+    public void BigSpin()
+    {
+        QueueTrick("BigSpin", bigSpinMultiplicator);
+    }
+    public void FsBigSpin()
+    {
+        QueueTrick("FsBigSpin", fsBigSpinMultiplicator);
+    }
 
     public void KickFlip()
     {
         QueueTrick("KickFlip", kickFlipMultiplicator);
+    }
+    public void HeelFlip()
+    {
+        QueueTrick("HeelFlip", heelFlipMultiplicator);
+    }
+    public void TreFlip()
+    {
+        QueueTrick("TreFlip", treFlipMultiplicator);
+    }
+    public void TreHeelFlip()
+    {
+        QueueTrick("TreHeelFlip", treHeelFlipMultiplicator);
+    }
+    public void FsTreFlip()
+    {
+        QueueTrick("FsTreFlip", fsTreFlipMultiplicator);
+    }
+    public void FsTreHeelFlip()
+    {
+        QueueTrick("FsTreHeelFlip", fsTreHeelFlipMultiplicator);
     }
     public void NoseSlide()
     {

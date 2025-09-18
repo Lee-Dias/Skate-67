@@ -41,7 +41,6 @@ public class Spawner : MonoBehaviour
 
     private void Update()
     {
-        holding = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S);
 
         if (holding)
         {

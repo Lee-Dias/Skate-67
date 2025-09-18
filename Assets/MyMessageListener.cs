@@ -6,12 +6,20 @@ public class MyMessageListener : MonoBehaviour
     [SerializeField]private skateController skateController;
     [SerializeField]private Spawner spawner;
 
-    private bool[] buttonPressed = new bool[6];
-    private bool[] buttonReleased = new bool[6];
+    private bool[] buttonPressed = new bool[8];
+    private bool[] buttonReleased = new bool[8];
+
+    private bool IstryingTailSlide;
+    private bool IstryingNoseSlide;
 
     void OnMessageArrived(string msg)
     {
-        if (string.IsNullOrEmpty(msg)) return;
+        Debug.Log(msg);
+        if (string.IsNullOrEmpty(msg))
+        {
+            return;
+        }
+        
 
         if (msg.StartsWith("P")) // Press
         {
@@ -44,79 +52,37 @@ public class MyMessageListener : MonoBehaviour
     void Update()
     {
         // --- 2-button Press Combos ---
-        if (buttonPressed[0] && buttonPressed[1])
+        if (buttonPressed[3])
         {
-            /* do something */
+            spawner.SetHoldingState(true);
         }
         else
-        if (buttonPressed[0] && buttonPressed[2])
+        if (buttonPressed[5])
         {
-            /* do something */
+            spawner.SetHoldingState(true);
         }
         else
-        if (buttonPressed[0] && buttonPressed[3])
+        if (buttonPressed[6])
         {
-            /* do something */
+
+            spawner.SetHoldingState(true);
+            if (IstryingNoseSlide == false)
+            {
+                skateController.NoseSlide();
+                IstryingNoseSlide = true;
+            }
+
         }
         else
-        if (buttonPressed[0] && buttonPressed[4])
+        if (buttonPressed[7])
         {
-            /* do something */
-        }
-        else
-        if (buttonPressed[0] && buttonPressed[5])
-        {
-            /* do something */
-        }
-        else
-        if (buttonPressed[1] && buttonPressed[2])
-        {
-            /* do something */
-        }
-        else
-        if (buttonPressed[1] && buttonPressed[3])
-        {
-            /* do something */
-        }
-        else
-        if (buttonPressed[1] && buttonPressed[4])
-        {
-            /* do something */
-        }
-        else
-        if (buttonPressed[1] && buttonPressed[5])
-        {
-            /* do something */
-        }
-        else
-        if (buttonPressed[2] && buttonPressed[3])
-        {
-            /* do something */
-        }
-        else
-        if (buttonPressed[2] && buttonPressed[4])
-        {
-            /* do something */
-        }
-        else
-        if (buttonPressed[2] && buttonPressed[5])
-        {
-            /* do something */
-        }
-        else
-        if (buttonPressed[3] && buttonPressed[4])
-        {
-            /* do something */
-        }
-        else
-        if (buttonPressed[3] && buttonPressed[5])
-        {
-            /* do something */
-        }
-        else
-        if (buttonPressed[4] && buttonPressed[5])
-        {
-            /* do something */
+            spawner.SetHoldingState(true);
+            if (IstryingTailSlide == false)
+            { 
+                skateController.TailSlide();
+                IstryingTailSlide = true;
+            }
+
         }
         else
         {
@@ -126,21 +92,23 @@ public class MyMessageListener : MonoBehaviour
 
 
         // --- 2-button Release Combos ---
-        if (buttonReleased[0] && buttonReleased[1]) { /* do something */ buttonReleased[0] = buttonReleased[1] = false; }
-        if (buttonReleased[0] && buttonReleased[2]) { /* do something */ buttonReleased[0] = buttonReleased[2] = false; }
-        if (buttonReleased[0] && buttonReleased[3]) { /* do something */ buttonReleased[0] = buttonReleased[3] = false; }
-        if (buttonReleased[0] && buttonReleased[4]) { /* do something */ buttonReleased[0] = buttonReleased[4] = false; }
-        if (buttonReleased[0] && buttonReleased[5]) { /* do something */ buttonReleased[0] = buttonReleased[5] = false; }
-        if (buttonReleased[1] && buttonReleased[2]) { /* do something */ buttonReleased[1] = buttonReleased[2] = false; }
-        if (buttonReleased[1] && buttonReleased[3]) { /* do something */ buttonReleased[1] = buttonReleased[3] = false; }
-        if (buttonReleased[1] && buttonReleased[4]) { /* do something */ buttonReleased[1] = buttonReleased[4] = false; }
-        if (buttonReleased[1] && buttonReleased[5]) { /* do something */ buttonReleased[1] = buttonReleased[5] = false; }
-        if (buttonReleased[2] && buttonReleased[3]) { /* do something */ buttonReleased[2] = buttonReleased[3] = false; }
-        if (buttonReleased[2] && buttonReleased[4]) { /* do something */ buttonReleased[2] = buttonReleased[4] = false; }
-        if (buttonReleased[2] && buttonReleased[5]) { /* do something */ buttonReleased[2] = buttonReleased[5] = false; }
-        if (buttonReleased[3] && buttonReleased[4]) { /* do something */ buttonReleased[3] = buttonReleased[4] = false; }
-        if (buttonReleased[3] && buttonReleased[5]) { /* do something */ buttonReleased[3] = buttonReleased[5] = false; }
-        if (buttonReleased[4] && buttonReleased[5]) { /* do something */ buttonReleased[4] = buttonReleased[5] = false; }
+        if (buttonReleased[0] && buttonReleased[2]) { skateController.TreFlip(); buttonReleased[0] = buttonReleased[2] = false; }
+        if (buttonReleased[0] && buttonReleased[4]) { skateController.FsTreFlip(); buttonReleased[0] = buttonReleased[4] = false; }
+        if (buttonReleased[0] && buttonReleased[5]) { skateController.KickFlip(); buttonReleased[0] = buttonReleased[5] = false; }
+        if (buttonReleased[1] && buttonReleased[2]) { skateController.TreHeelFlip(); buttonReleased[1] = buttonReleased[2] = false; }
+        if (buttonReleased[1] && buttonReleased[4]) { skateController.FsTreHeelFlip(); buttonReleased[1] = buttonReleased[4] = false; }
+        if (buttonReleased[1] && buttonReleased[5]) { skateController.HeelFlip(); buttonReleased[1] = buttonReleased[5] = false; }
+        if (buttonReleased[2] && buttonReleased[3]) { skateController.BigSpin(); buttonReleased[2] = buttonReleased[3] = false; }
+        if (buttonReleased[3] && buttonReleased[4]) { skateController.FsBigSpin(); buttonReleased[3] = buttonReleased[4] = false; }
+        if (buttonReleased[3] && buttonReleased[5]) { skateController.Ollie(); buttonReleased[3] = buttonReleased[5] = false; }
+        if (buttonReleased[6])
+        {
+            IstryingNoseSlide = false;
+        }
+        if (buttonReleased[7])
+        {
+            IstryingTailSlide = false;
+        }
     }
 
     void OnConnectionEvent(bool success)
