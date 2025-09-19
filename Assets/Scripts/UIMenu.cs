@@ -25,6 +25,10 @@ public class NewMonoBehaviourScript : MonoBehaviour
     [SerializeField] private GameObject credits;
     [SerializeField] private Button creditsExit;
 
+    [Space(10)]
+    [Header("Settings")]
+    [SerializeField] private PlayerSettings playerSettings;
+
     private void Awake()
     {
         // Menu
@@ -39,6 +43,8 @@ public class NewMonoBehaviourScript : MonoBehaviour
 
         //Credits
         creditsExit.onClick.AddListener(TurnCreditsOff);
+
+        soundSlider.value = playerSettings.volume;
     }
 
     private void LoadNextScene()
@@ -78,13 +84,12 @@ public class NewMonoBehaviourScript : MonoBehaviour
 
     private void SetVolume(float value)
     {
-        // Range should be 0.0f – 1.0f
-        AudioListener.volume = value;
+        playerSettings.volume = value;
     }
 
     private void QuitGame()
     {
-         Application.Quit();
+        Application.Quit();
     }
 
 }
