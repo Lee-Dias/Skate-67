@@ -52,7 +52,17 @@ public class MyMessageListener : MonoBehaviour
     void Update()
     {
         // --- 2-button Press Combos ---
+        if (buttonPressed[2])
+        {
+            spawner.SetHoldingState(true);
+        }
+        else
         if (buttonPressed[3])
+        {
+            spawner.SetHoldingState(true);
+        }
+        else
+        if (buttonPressed[4])
         {
             spawner.SetHoldingState(true);
         }
@@ -78,7 +88,7 @@ public class MyMessageListener : MonoBehaviour
         {
             spawner.SetHoldingState(true);
             if (IstryingTailSlide == false)
-            { 
+            {
                 skateController.TailSlide();
                 IstryingTailSlide = true;
             }
