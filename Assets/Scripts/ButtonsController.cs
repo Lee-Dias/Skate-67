@@ -4,8 +4,7 @@ using UnityEngine.UI;
 public class ButtonsController : MonoBehaviour
 {
     [SerializeField] private Slider volumeSlider;
-    [SerializeField] private PlayerSettings playerSettings;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [SerializeField] private PlayerSettings playerSettings; 
     void Start()
     {
         volumeSlider.value = playerSettings.volume;

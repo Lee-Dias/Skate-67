@@ -69,8 +69,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
-    // Update is called once per frame
     public void EndGame()
     {
         Scene currentScene = SceneManager.GetActiveScene();

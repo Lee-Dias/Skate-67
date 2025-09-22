@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 11101620}
   - component: {fileID: 11101622}
   - component: {fileID: 11101621}
+  - component: {fileID: 11101623}
   m_Layer: 0
   m_Name: 67
   m_TagString: Untagged
@@ -228,8 +229,8 @@ MonoBehaviour:
     m_Bits: 72
   nosePoint: {fileID: 350009638}
   tailPoint: {fileID: 1573136095}
-  noseCollider: {fileID: 0}
-  tailCollider: {fileID: 0}
+  noseCollider: {fileID: 350009639}
+  tailCollider: {fileID: 1573136096}
   railDetector: {fileID: 11101620}
   ollieMultiplicator: 1
   bigSpinMultiplicator: 1.2
@@ -241,7 +242,7 @@ MonoBehaviour:
   fsTreFlipMultiplicator: 2
   fsTreHeelFlipMultiplicator: 2
   gameManager: {fileID: 1681077313}
-  grindDetachDistance: 1
+  grindDetachDistance: 2
 --- !u!114 &11101620
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -293,6 +294,29 @@ MonoBehaviour:
   messageListener: {fileID: 11101614}
   reconnectionDelay: 1000
   maxUnreadMessages: 1
+--- !u!136 &11101623
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 11101614}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.22
+  m_Height: 0.91
+  m_Direction: 0
+  m_Center: {x: 0, y: 0.12, z: 0}
 --- !u!1 &66378392
 GameObject:
   m_ObjectHideFlags: 0
@@ -1045,13 +1069,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 410087039}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.39992946, y: 0.60006696, z: -0.49123642, w: 0.48853144}
+  m_LocalRotation: {x: 0.1272291, y: 0.4538899, z: -0.38864204, w: 0.791678}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 78.61, y: 101.7, z: 0}
+  m_LocalEulerAnglesHint: {x: 33.659, y: 48.126, z: -36.909}
 --- !u!114 &410087042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1982,7 +2006,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1187319349
 MonoBehaviour:
   m_ObjectHideFlags: 0

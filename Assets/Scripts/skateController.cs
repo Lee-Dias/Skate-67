@@ -6,15 +6,14 @@ using UnityEngine.InputSystem;
 public class skateController : MonoBehaviour
 {
     [Header("Jump Settings")]
-    [SerializeField] private float jumpForce = 7f;          // Upward pop
-    [SerializeField] private float gravityMultiplier = 2f;  // Makes jump fall faster (snappier)
-
+    [SerializeField] private float jumpForce = 7f;          
+    [SerializeField] private float gravityMultiplier = 2f;  
     [Header("References")]
-    [SerializeField] private Rigidbody rb;                  // Rigidbody on PlayerRoot
-    [SerializeField] private Animator animator;             // Animator for visual mesh
+    [SerializeField] private Rigidbody rb;            
+    [SerializeField] private Animator animator;           
 
     [Header("Ground Detection")]
-    [SerializeField] private LayerMask groundLayers;        // Floor + obstacles layers
+    [SerializeField] private LayerMask groundLayers;        
     [SerializeField] private Transform nosePoint;
     [SerializeField] private Transform tailPoint;
     [SerializeField] private BoxCollider noseCollider;
@@ -33,7 +32,7 @@ public class skateController : MonoBehaviour
     [SerializeField] private float fsTreHeelFlipMultiplicator;
 
     [SerializeField] private GameManager gameManager;
-    [SerializeField] private float grindDetachDistance = 3f; // tweak to taste
+    [SerializeField] private float grindDetachDistance = 3f; 
     private bool isGrounded = true;
 
     private GameObject currentRail;
@@ -65,23 +64,33 @@ public class skateController : MonoBehaviour
         {
             if (Input.GetKeyUp(KeyCode.Space))
                 Ollie();
-
             if (Input.GetKeyUp(KeyCode.I))
                 KickFlip();
+            if (Input.GetKeyUp(KeyCode.Alpha1))
+                HeelFlip();
+            if (Input.GetKeyUp(KeyCode.Alpha2))
+                BigSpin();
+            if (Input.GetKeyUp(KeyCode.Alpha3))
+                FsBigSpin();
+            if (Input.GetKeyUp(KeyCode.Alpha4))
+                TreFlip();
+            if (Input.GetKeyUp(KeyCode.Alpha5))
+                FsTreFlip();
+            
 
         }
 
 
-        // Try Nose Slide
+
         if (Input.GetKeyDown(KeyCode.P) && !isGrounded && !isGrinding)
         {
             NoseSlide();
         }
-        // Try Tail Slide
         else if (Input.GetKeyDown(KeyCode.O) && !isGrounded && !isGrinding)
         {
             TailSlide();
         }
+        
 
         if (isGrinding)
         {
@@ -124,7 +133,7 @@ public class skateController : MonoBehaviour
 
     private bool IsRailOnRight(Transform snapPoint, Collider rail)
     {
-        return rail.transform.position.x > 0f; // true = right, false = left
+        return rail.transform.position.x > 0f; 
     }
 
     public void Ollie()
@@ -210,7 +219,7 @@ public class skateController : MonoBehaviour
 
     private void TryStartGrind(Transform snapPoint, string animName, Collider rail)
     {
-        // Save pre-grind state
+
         preGrindPosition = transform.position;
         preGrindRotation = transform.rotation;
 
@@ -234,13 +243,12 @@ public class skateController : MonoBehaviour
 
         Vector3 startPos = transform.position;
 
-        // Closest point on rail to the nose/tail
+
         Vector3 railClosestPoint = rail.ClosestPoint(snapPoint.position);
 
-        // Offset between the root (67) and the snapPoint (Nose/Tail) in world space
+
         Vector3 snapOffset = transform.position - snapPoint.position;
 
-        // Where the root (67) needs to move so that snapPoint lands exactly on the rail
         Vector3 targetPos = railClosestPoint + snapOffset;
 
         while (elapsed < duration)
@@ -271,7 +279,6 @@ public class skateController : MonoBehaviour
         animator.SetBool(gr, false);
         currentRail = null;
 
-        // Smoothly return to pre-grind position
         StartCoroutine(ReturnFromGrind());
     }
 
@@ -283,7 +290,7 @@ public class skateController : MonoBehaviour
         Vector3 startPos = transform.position;
         Quaternion startRot = transform.rotation;
 
-        // Target only X and Z, keep current Y
+
         Vector3 targetPos = new Vector3(preGrindPosition.x, transform.position.y, preGrindPosition.z);
 
         while (elapsed < duration)
@@ -291,12 +298,11 @@ public class skateController : MonoBehaviour
             elapsed += Time.deltaTime;
             float t = Mathf.Clamp01(elapsed / duration);
 
-            // Lerp X/Z back, keep Y constant
+
             float newX = Mathf.Lerp(startPos.x, targetPos.x, t);
             float newZ = Mathf.Lerp(startPos.z, targetPos.z, t);
             transform.position = new Vector3(newX, transform.position.y, newZ);
 
-            // Smoothly return rotation if you want
             transform.rotation = Quaternion.Slerp(startRot, preGrindRotation, t);
 
             yield return null;
