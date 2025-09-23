@@ -62,20 +62,25 @@ public class skateController : MonoBehaviour
         }
         if (isGrounded && !isGrinding)
         {
-            if (Input.GetKeyUp(KeyCode.Space))
-                Ollie();
-            if (Input.GetKeyUp(KeyCode.I))
-                KickFlip();
             if (Input.GetKeyUp(KeyCode.Alpha1))
-                HeelFlip();
+                Ollie();
             if (Input.GetKeyUp(KeyCode.Alpha2))
                 BigSpin();
             if (Input.GetKeyUp(KeyCode.Alpha3))
                 FsBigSpin();
             if (Input.GetKeyUp(KeyCode.Alpha4))
-                TreFlip();
+                KickFlip();
             if (Input.GetKeyUp(KeyCode.Alpha5))
+                HeelFlip();
+            if (Input.GetKeyUp(KeyCode.Alpha6))
+                TreFlip();
+            if (Input.GetKeyUp(KeyCode.Alpha7))
+                TreHeelFlip();
+            if (Input.GetKeyUp(KeyCode.Alpha8))
                 FsTreFlip();
+            if (Input.GetKeyUp(KeyCode.Alpha9))
+                FsTreHeelFlip();
+
             
 
         }

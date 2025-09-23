@@ -41,6 +41,7 @@ public class Spawner : MonoBehaviour
 
     private void Update()
     {
+        // only should be active if playing in M&K
         holding = Input.GetKey(KeyCode.W);
 
         if (holding)
